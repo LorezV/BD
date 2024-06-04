@@ -1,0 +1,24 @@
+# Node artifact files
+node_modules/
+dist/
+
+# Log files
+*.log
+
+# JetBrains IDE
+.idea/
+
+# lock files
+yarn.lock
+package-lock.json
+
+# secret files
+src/config/secret-localhost.yaml
+src/config/secret-develop.yaml
+src/config/secret-production.yaml
+src/config/secret-test.yaml
+
+# test artifacts
+.artifacts
+coverage/
+

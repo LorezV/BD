@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique @db.VarChar(255)
+  phoneNumber String    @unique @db.VarChar(16)
+  firstName   String    @db.VarChar(32)
+  lastName    String    @db.VarChar(32)
+  password    String
+  createdAt   DateTime  @default(now()) @db.Timestamptz()
+  updatedAt   DateTime  @updatedAt @db.Timestamptz()
+  deletedAt   DateTime? @db.Timestamptz()
+
+  typeId   Int
+  Type     UserType  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  Tokens   Token[]
+  Podcasts Podcast[]
+}
+
+model UserType {
+  id    Int    @id @default(autoincrement())
+  name  String @unique @db.VarChar(32)
+  Users User[]
+}
+
+model Token {
+  id                    Int       @id @default(autoincrement())
+  accessToken           String    @db.Text()
+  accessTokenExpiredAt  DateTime  @db.Timestamptz()
+  refreshToken          String    @db.Text()
+  refreshTokenExpiredAt DateTime  @db.Timestamptz()
+  createdAt             DateTime  @default(now()) @db.Timestamptz()
+  updatedAt             DateTime  @updatedAt @db.Timestamptz()
+  deletedAt             DateTime? @db.Timestamptz()
+
+  userId Int
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PodcastCategory {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(255)
+  Podcast Podcast[]
+}
+
+model Podcast {
+  id          Int       @id @default(autoincrement())
+  header      String    @db.VarChar(255)
+  description String    @db.Text()
+  coverLink   String    @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @db.Timestamptz()
+  updatedAt   DateTime  @updatedAt @db.Timestamptz()
+  deletedAt   DateTime? @db.Timestamptz()
+
+  categoryId Int?
+  Category   PodcastCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  authorId   Int
+  Author     User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  Streams    Stream[]
+}
+
+model StreamType {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique @db.VarChar(32)
+  Streams Stream[]
+}
+
+model Stream {
+  id          Int       @id @default(autoincrement())
+  header      String    @db.VarChar(255)
+  description String    @db.Text()
+  coverLink   String    @db.VarChar(255)
+  postLink    String    @db.VarChar(255)
+  startDate   DateTime? @db.Timestamptz()
+  endDate     DateTime? @db.Timestamptz()
+  duration    Int?
+  createdAt   DateTime  @default(now()) @db.Timestamptz()
+  updatedAt   DateTime  @updatedAt @db.Timestamptz()
+  deletedAt   DateTime? @db.Timestamptz()
+
+  typeId Int
+  Type   StreamType @relation(fields: [typeId], references: [id], onDelete: Cascade)
+
+  podcastId Int
+  Podcast   Podcast @relation(fields: [podcastId], references: [id], onDelete: Cascade)
+}
