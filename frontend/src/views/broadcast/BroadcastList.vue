@@ -7,6 +7,7 @@ import api from "@/api";
 import { Input } from "../../components/form";
 
 import { IPodcast, IStream, IStreamType } from "../../interfaces";
+import dayjs from "dayjs";
 
 const streams = ref<IStream[] | null>(null);
 const streamTypes = ref<IStreamType[] | null>(null);
@@ -21,6 +22,13 @@ async function fetchStreams() {
   const response = await api.get("/stream", {
     params: {
       typeId: 2,
+      ...(filterPodcastId.value ? { podcastId: filterPodcastId.value } : {}),
+      ...(filterStartDate.value
+        ? { startDate: dayjs(filterStartDate.value).toDate() }
+        : {}),
+      ...(filterEndDate.value
+        ? { endDate: dayjs(filterEndDate.value).toDate() }
+        : {}),
     },
   });
   if (response.status === 200) {
@@ -68,6 +76,18 @@ onBeforeMount(async () => {
 
     <div class="flex flex-col gap-2 px-4 mt-8" v-if="filterActive">
       <h2>Фильтры</h2>
+
+      <Input
+        type="datetime-local"
+        label="Дата начала"
+        v-model="filterStartDate"
+      />
+
+      <Input
+        type="datetime-local"
+        label="Дата окончания"
+        v-model="filterEndDate"
+      />
 
       <label class="flex flex-col">
         <span>Подкаст</span>

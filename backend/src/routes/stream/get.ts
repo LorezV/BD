@@ -17,8 +17,8 @@ export async function get(
     where: {
       podcastId: request.query.podcastId || undefined,
       typeId: request.query.typeId,
-      endDate: request.query.endDate || undefined,
-      startDate: request.query.startDate || undefined,
+      endDate: { lte: request.query.endDate } || undefined,
+      startDate: { gte: request.query.startDate } || undefined,
     },
     include: {
       Podcast: {

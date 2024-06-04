@@ -25,7 +25,7 @@ export interface IStream {
   coverLink: string;
   postLink: string;
   startDate: string;
-  endDate: Date | null;
+  endDate: string;
   duration: number | null;
   createdAt: Date;
   updatedAt: Date;

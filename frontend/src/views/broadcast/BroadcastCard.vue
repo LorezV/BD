@@ -7,7 +7,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex px-4 pb-8">
+  <RouterLink
+    :to="{ name: 'broadcast-view', params: { broadcastId: stream.id } }"
+    class="flex px-4 pb-8"
+  >
     <div>
       <div
         class="w-24 h-24 bg-center bg-cover rounded"
@@ -34,5 +37,5 @@ defineProps<{
         {{ new Date(stream.startDate).toLocaleString() }}
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>

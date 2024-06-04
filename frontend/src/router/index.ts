@@ -34,10 +34,16 @@ const router = createRouter({
           component: () => import("@/views/broadcast/BroadcastCreate.vue"),
         },
         {
+          name: "broadcast-view",
+          path: "broadcast/view/:broadcastId",
+          component: () => import("@/views/broadcast/BroadcastView.vue"),
+        },
+        {
           name: "announcement-list",
           path: "announcement/list",
           component: () => import("@/views/announcement/AnnouncementList.vue"),
         },
+
         {
           name: "profile-view",
           path: "profile/view",
